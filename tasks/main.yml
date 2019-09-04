@@ -12,7 +12,7 @@
 
 - name: install filebeat elastic packages
   package:
-    name: {{ filebeat_packages | default(filebeat_package_names_els) }}
+    name: "{{ filebeat_packages | default(filebeat_package_names_els) }}"
     state: "{{ filebeat_package_state }}"
   notify: install filebeat template
 
