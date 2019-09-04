@@ -34,7 +34,7 @@ filebeat_conf_setup:
 
 filebeat_conf_base:
   filebeat:
-    modules: "{{ filebeat_conf_modules }}" 
+    modules: "{{ filebeat_conf_modules }}"
     inputs: "{{ filebeat_conf_inputs }}"
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
