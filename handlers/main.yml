@@ -1,0 +1,19 @@
+---
+- name: restart filebeat
+  service:
+    name: "{{ filebeat_service_name }}"
+    state: restarted
+
+- name: install filebeat template
+  command: |
+    filebeat setup --template -E {{ filebeat_cmd_enable }} -E {{ filebeat_cmd_hosts }}
+  vars:
+    filebeat_els_hosts: "{{ filebeat_conf.output.elasticsearch.hosts }}"
+    filebeat_cmd_enable: "output.elasticsearch.enabled=true"
+    filebeat_cmd_hosts: "output.elasticsearch.hosts={{ filebeat_els_hosts | to_json }}"
+  when:
+    - "filebeat_conf is defined"
+    - "'output' in filebeat_conf"
+    - "'elasticsearch' in filebeat_conf.output"
+    - "'hosts' in filebeat_conf.output.elasticsearch"
+  ignore_errors: yes

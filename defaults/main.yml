@@ -1,0 +1,42 @@
+---
+filebeat_package_names_els: filebeat
+filebeat_package_state: present
+filebeat_conf_manage: yes
+filebeat_conf_path: /etc/filebeat/filebeat.yml
+filebeat_service_name: filebeat
+filebeat_service_status: started
+filebeat_service_enabled: yes
+
+filebeat_conf_modules:
+  - module: system
+
+filebeat_conf_inputs: []
+
+filebeat_conf_extra: {}
+
+filebeat_conf_output:
+  elasticsearch:
+    enabled: "{{ filebeat_conf_elasticsearch_enabled | default(true) }}"
+    hosts: "{{ filebeat_conf_elasticsearch_hosts | default('localhost:9200') }}"
+  logstash:
+    enabled: "{{ filebeat_conf_logstash_enabled | default(false) }}"
+    hosts: "{{ filebeat_conf_logstash_hosts | default('localhost:5044') }}"
+
+filebeat_conf_setup:
+  dashboards:
+    enabled: "{{ filebeat_conf_dashboards_enabled | default(false) }}"
+    beat: filebeat
+    always_kibana: "{{ filebeat_conf_dashboards_kibana | default(true) }}"
+  template:
+    enabled: "{{ filebeat_conf_template_enabled | default(true) }}"
+  kibana:
+    host: "{{ filebeat_conf_kibana_host | default('localhost:80') }}"
+
+filebeat_conf_base:
+  filebeat:
+    modules: "{{ filebeat_conf_modules }}" 
+    inputs: "{{ filebeat_conf_inputs }}"
+  output: "{{ filebeat_conf_output }}"
+  setup: "{{ filebeat_conf_setup }}"
+
+filebeat_conf: "{{ filebeat_conf_base | combine(filebeat_conf_extra) }}"

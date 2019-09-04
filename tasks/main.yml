@@ -1,0 +1,35 @@
+---
+- name: include variable overrides
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "vars/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "vars/{{ ansible_distribution }}.yml"
+        - "vars/{{ ansible_os_family }}.yml"
+        - "vars/main.yml"
+  tags:
+    - filebeat
+
+- name: install filebeat elastic packages
+  package:
+    name: {{ filebeat_packages | default(filebeat_package_names_els) }}
+    state: "{{ filebeat_package_state }}"
+  notify: install filebeat template
+
+- name: configure filebeat
+  copy:
+    content: |
+      # Ansible managed
+
+      {{ filebeat_conf | to_nice_yaml(indent=2) }}
+    dest: "{{ filebeat_conf_path }}"
+  notify: restart filebeat
+  when:
+    - filebeat_conf is defined
+    - filebeat_conf_manage | bool
+
+- name: manage filebeat services
+  service:
+    name: "{{ filebeat_service_name }}"
+    state: "{{ filebeat_service_status }}"
+    enabled: "{{ filebeat_service_enabled }}"

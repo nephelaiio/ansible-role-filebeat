@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  role_name: filebeat
+  author: Ted Cook
+  description: An Ansible role to install and configure filebeat
+  license: MIT
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Ubuntu
+      versions:
+        - bionic
+        - xenial
+    - name: Debian
+      versions:
+        - stretch
+  galaxy_tags:
+    - filebeat
+
+dependencies:
+  - name: nephelaiio.elastic_repo
+    vars:
+      elastic_repo_oss: no
+    version: 1.0.0
