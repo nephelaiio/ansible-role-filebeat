@@ -34,6 +34,11 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
+  inventory:
+    group_vars:
+      all:
+        filebeat_conf_modules_default:
+          - module: system
 scenario:
   name: default
 verifier:
