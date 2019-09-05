@@ -33,7 +33,7 @@ filebeat_conf_setup:
 
 filebeat_conf_base:
   filebeat:
-    modules: "{{ filebeat_conf_modules | default(filebeat_conf_input_default) }}"
+    modules: "{{ filebeat_conf_modules | default(filebeat_conf_inputs_default) }}"
     inputs: "{{ filebeat_conf_inputs | default(filebeat_conf_inputs_default) }}"
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
