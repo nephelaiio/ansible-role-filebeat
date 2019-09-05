@@ -37,8 +37,12 @@ provisioner:
   inventory:
     group_vars:
       all:
-        filebeat_conf_modules_default:
+        filebeat_conf_modules:
           - module: system
+        filebeat_conf_inputs:
+          - type: log
+            paths:
+              - /var/log/messages
 scenario:
   name: default
 verifier:
