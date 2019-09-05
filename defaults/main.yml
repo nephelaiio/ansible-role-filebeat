@@ -7,8 +7,7 @@ filebeat_service_name: filebeat
 filebeat_service_status: started
 filebeat_service_enabled: yes
 
-filebeat_conf_modules_default:
-  - module: system
+filebeat_conf_modules_default: []
 
 filebeat_conf_inputs_default: []
 
