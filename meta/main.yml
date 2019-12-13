@@ -21,6 +21,5 @@ galaxy_info:
 
 dependencies:
   - name: nephelaiio.elastic_repo
-    vars:
-      elastic_repo_oss: no
     version: 1.0.0
+    when: false

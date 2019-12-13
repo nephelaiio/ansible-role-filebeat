@@ -1,11 +1,13 @@
 ---
-filebeat_package_names_els: filebeat
+filebeat_repo_manage: yes
+filebeat_package_names: filebeat
 filebeat_package_state: present
 filebeat_conf_manage: yes
 filebeat_conf_path: /etc/filebeat/filebeat.yml
 filebeat_service_name: filebeat
 filebeat_service_status: started
 filebeat_service_enabled: yes
+filebeat_package_hold: no
 
 filebeat_conf_modules_default: []
 

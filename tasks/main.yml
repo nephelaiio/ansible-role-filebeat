@@ -10,11 +10,56 @@
   tags:
     - filebeat
 
+- name: configure elastic repo
+  include_role:
+    name: nephelaiio.elastic_repo
+  when: filebeat_repo_manage | bool
+
+- block:
+
+    - name: install yum version lock support
+      package:
+        name: yum-plugin-versionlock
+      when: ansible_os_family == 'RedHat'
+
+    - name: disable yum package lock
+      command: "yum versionlock delete {{ item }}"
+      ignore_errors: yes
+      loop: "{{ [filebeat_package_names] | flatten }}"
+      when: ansible_os_family == 'RedHat'
+      tags:
+        - skip_ansible_lint
+
+    - name: disable apt package lock
+      command: "apt-mark unhold {{ item }}"
+      loop: "{{ [filebeat_package_names] | flatten }}"
+      when: ansible_os_family == 'Debian'
+
+  when: filebeat_package_hold | bool
+  ignore_errors: yes
+
 - name: install filebeat elastic packages
   package:
-    name: "{{ filebeat_packages | default(filebeat_package_names_els) }}"
+    name: "{{ filebeat_package_names }}"
     state: "{{ filebeat_package_state }}"
-  notify: install filebeat template
+
+- block:
+
+    - name: enable apt package hold
+      command: "apt-mark hold {{ item }}"
+      loop: "{{ [filebeat_package_names] | flatten }}"
+      when:
+        - ansible_os_family == 'Debian'
+
+    - name: enable yum package lock
+      command: "yum versionlock add {{ item }}"
+      loop: "{{ [filebeat_package_names] | flatten }}"
+      when:
+        - ansible_os_family == 'RedHat'
+      tags:
+        - skip_ansible_lint
+
+  when: filebeat_package_hold | bool
 
 - name: configure filebeat
   copy:
