@@ -37,7 +37,6 @@ provisioner:
   inventory:
     group_vars:
       all:
-        filebeat_package_hold: yes
         filebeat_conf_modules:
           - module: system
         filebeat_conf_inputs:
