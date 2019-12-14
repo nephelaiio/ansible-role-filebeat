@@ -70,7 +70,8 @@
     dest: "{{ filebeat_conf_path }}"
   notify: restart filebeat
   when:
-    - filebeat_conf is defined
+    - filebeat_conf_modules is defined
+    - filebeat_conf_inputs is defined
     - filebeat_conf_manage | bool
 
 - name: manage filebeat services

@@ -9,10 +9,6 @@ filebeat_service_status: started
 filebeat_service_enabled: yes
 filebeat_package_hold: no
 
-filebeat_conf_modules_default: []
-
-filebeat_conf_inputs_default: []
-
 filebeat_conf_extra: {}
 
 filebeat_conf_output:
@@ -35,8 +31,8 @@ filebeat_conf_setup:
 
 filebeat_conf_base:
   filebeat:
-    modules: "{{ filebeat_conf_modules | default(filebeat_conf_inputs_default) }}"
-    inputs: "{{ filebeat_conf_inputs | default(filebeat_conf_inputs_default) }}"
+    modules: "{{ filebeat_conf_modules | default([]) }}"
+    inputs: "{{ filebeat_conf_inputs | default([]) }}"
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
 
