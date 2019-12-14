@@ -4,6 +4,7 @@ filebeat_package_names: filebeat
 filebeat_package_state: present
 filebeat_conf_manage: yes
 filebeat_conf_path: /etc/filebeat/filebeat.yml
+filebeat_modules_path: /etc/filebeat/modules.d/*.yml
 filebeat_service_name: filebeat
 filebeat_service_status: started
 filebeat_service_enabled: yes
@@ -32,6 +33,9 @@ filebeat_conf_setup:
 filebeat_conf_base:
   filebeat:
     modules: "{{ filebeat_conf_modules | default([]) }}"
+    config:
+      modules:
+        path: "{{ filebeat_modules_path }}"
     inputs: "{{ filebeat_conf_inputs | default([]) }}"
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
