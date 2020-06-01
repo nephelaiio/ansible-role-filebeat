@@ -12,11 +12,13 @@ filebeat_package_hold: no
 
 filebeat_conf_elasticsearch_enabled: true
 filebeat_conf_elasticsearch_loadbalance: true
-filebeat_conf_elasticsearch_hosts: 'localhost:9200'
+filebeat_conf_elasticsearch_port: 9200
+filebeat_conf_elasticsearch_hosts: ['localhost']
 
 filebeat_conf_logstash_enabled: false
 filebeat_conf_logstash_loadbalance: true
-filebeat_conf_logstash_hosts: 'localhost:5044'
+filebeat_conf_logstash_port: 5044
+filebeat_conf_logstash_hosts: ['localhost']
 
 filebeat_conf_dashboards_enabled: false
 filebeat_conf_dashboards_kibana: true
@@ -31,7 +33,7 @@ filebeat_conf_extra: {}
 filebeat_conf_output:
   elasticsearch:
     enabled: "{{ filebeat_conf_elasticsearch_enabled }}"
-    hosts: "{{ filebeat_conf_elasticsearch_hosts }}"
+    hosts: "{{ opendistro_logstash_beat_hosts | map('map_format', '%s:' + (logstash_listen_port_filebeat | string)) | list }}"
     loadbalance: "{{ filebeat_conf_elasticsearch_loadbalance }}"
   logstash:
     enabled: "{{ filebeat_conf_logstash_enabled }}"
