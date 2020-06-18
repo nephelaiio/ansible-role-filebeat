@@ -87,9 +87,11 @@
     dest: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml"
     content: |
       ---
-      {{ module_conf | to_nice_yaml(indent=2) }}
+      {{ module_conf_item | to_nice_yaml(indent=2) }}
   vars:
     module_name: "{{ module_conf.module }}"
+    module_conf_item:
+      - "{{ module_conf }}"
   loop_control:
     loop_var: module_conf
     label: "{{ module_name }}"
