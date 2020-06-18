@@ -56,7 +56,6 @@ filebeat_conf_setup:
 
 filebeat_conf_base:
   filebeat:
-    modules: "{{ filebeat_conf_modules }}"
     config:
       modules:
         path: "{{ filebeat_modules_path }}"

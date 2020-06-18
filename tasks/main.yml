@@ -71,6 +71,31 @@
   notify: restart filebeat
   when: filebeat_conf_manage | bool
 
+- name: prune stale filebeat module configuration files
+  file:
+    path: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml.disabled"
+    state: absent
+  vars:
+    module_name: "{{ module_conf.module }}"
+  loop_control:
+    loop_var: module_conf
+    label: "{{ module_name }}"
+  loop: "{{ filebeat_conf_modules }}"
+
+- name: manage filebeat module configuration files
+  copy:
+    dest: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml"
+    content: |
+      ---
+      {{ module_conf | to_nice_yaml(indent=2) }}
+  vars:
+    module_name: "{{ module_conf.module }}"
+  loop_control:
+    loop_var: module_conf
+    label: "{{ module_name }}"
+  notify: restart filebeat
+  loop: "{{ filebeat_conf_modules }}"
+
 - name: manage filebeat services
   service:
     name: "{{ filebeat_service_name }}"
