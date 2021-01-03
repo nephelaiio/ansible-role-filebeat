@@ -3,38 +3,19 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint: |
-  set -e
-  yamllint .
-  ansible-lint tasks/*
-  flake8
 platforms:
-  - name: centos7
-    image: centos:7
-    privileged: yes
-    command: /usr/sbin/init
-    volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - name: xenial
-    image: ubuntu:xenial
-    privileged: yes
-    command: /sbin/init
-    volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - name: bionic
-    image: ubuntu:bionic
-    privileged: yes
-    command: /sbin/init
-    volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - name: stretch
-    image: debian:stretch
-    privileged: yes
-    command: /sbin/init
-    volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  - name: instance
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
 provisioner:
   name: ansible
+  log: true
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   inventory:
     group_vars:
       all:

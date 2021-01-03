@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: filebeat
   author: Ted Cook
-  description: An Ansible role to install and configure filebeat
+  description: An Ansible role to install and configure metricbeat
   license: MIT
   min_ansible_version: 2.7
   platforms:
@@ -11,17 +11,16 @@ galaxy_info:
         - 7
     - name: Ubuntu
       versions:
-        - bionic
-        - xenial
+        - 20.04
+        - 18.04
+        - 16.04
     - name: Debian
       versions:
-        - stretch
+        - 10
   galaxy_tags:
     - filebeat
 
 dependencies:
   - name: nephelaiio.plugins
-    version: 1.0.23
   - name: nephelaiio.elastic_repo
-    version: 1.0.0
     when: false
