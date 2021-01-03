@@ -11,12 +11,12 @@ galaxy_info:
         - 7
     - name: Ubuntu
       versions:
-        - 20.04
-        - 18.04
-        - 16.04
+        - focal
+        - bionic
+        - xenial
     - name: Debian
       versions:
-        - 10
+        - stretch
   galaxy_tags:
     - filebeat
 
