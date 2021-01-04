@@ -1,6 +1,6 @@
 # nephelaiio.filebeat
 
-[![Build Status](https://github.com/nephelaiio/ansible-role-filebeat/workflows/.github/workflows/main.yml/badge.svg)](https://travis-ci.org/nephelaiio/ansible-role-filebeat)
+[![Build Status](https://github.com/nephelaiio/ansible-role-filebeat/workflows/CI/badge.svg)](https://github.com/nephelaiio/ansible-role-filebeat/actions)
 [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-nephelaiio.filebeat-blue.svg)](https://galaxy.ansible.com/nephelaiio/filebeat/)
 
 An [ansible role](https://galaxy.ansible.com/nephelaiio/filebeat) to install and configure filebeat
