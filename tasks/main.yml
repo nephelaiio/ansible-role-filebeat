@@ -88,11 +88,15 @@
       notify: restart filebeat
       loop: "{{ filebeat_conf_modules }}"
 
-  when: filebeat_conf_manage | bool
+  when:
+    - filebeat_conf_manage | bool
+    - filebeat_package_state in ['present', 'absent']
 
 - name: manage filebeat services
   service:
     name: "{{ filebeat_service_name }}"
     state: "{{ filebeat_service_status }}"
     enabled: "{{ filebeat_service_enabled }}"
-  when: filebeat_service_manage | bool
+  when:
+    - filebeat_service_manage | bool
+    - filebeat_package_state in ['present', 'absent']

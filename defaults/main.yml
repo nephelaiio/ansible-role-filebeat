@@ -3,7 +3,6 @@ filebeat_repo_manage: yes
 filebeat_package_names: filebeat
 filebeat_package_state: present
 filebeat_conf_manage: yes
-filebeat_service_manage: yes
 filebeat_conf_path: /etc/filebeat/filebeat.yml
 filebeat_conf_modules_path: /etc/filebeat/modules.d
 filebeat_service_name: filebeat
