@@ -50,45 +50,49 @@
 
   when: filebeat_package_hold | bool
 
-- name: configure filebeat
-  copy:
-    content: |
-      # Ansible managed
+- block:
 
-      {{ filebeat_conf | to_nice_yaml(indent=2) }}
-    dest: "{{ filebeat_conf_path }}"
-  notify: restart filebeat
+    - name: configure filebeat
+      copy:
+        content: |
+          # Ansible managed
+
+          {{ filebeat_conf | to_nice_yaml(indent=2) }}
+        dest: "{{ filebeat_conf_path }}"
+      notify: restart filebeat
+
+    - name: prune stale filebeat module configuration files
+      file:
+        path: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml.disabled"
+        state: absent
+      vars:
+        module_name: "{{ module_conf.module }}"
+      loop_control:
+        loop_var: module_conf
+        label: "{{ module_name }}"
+      loop: "{{ filebeat_conf_modules }}"
+
+    - name: manage filebeat module configuration files
+      copy:
+        dest: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml"
+        content: |
+          ---
+          {{ module_conf_item | to_nice_yaml(indent=2) }}
+      vars:
+        module_name: "{{ module_conf.module }}"
+        module_conf_item:
+          - "{{ module_conf }}"
+      loop_control:
+        loop_var: module_conf
+        label: "{{ module_name }}"
+      notify: restart filebeat
+      loop: "{{ filebeat_conf_modules }}"
+
   when: filebeat_conf_manage | bool
-
-- name: prune stale filebeat module configuration files
-  file:
-    path: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml.disabled"
-    state: absent
-  vars:
-    module_name: "{{ module_conf.module }}"
-  loop_control:
-    loop_var: module_conf
-    label: "{{ module_name }}"
-  loop: "{{ filebeat_conf_modules }}"
-
-- name: manage filebeat module configuration files
-  copy:
-    dest: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml"
-    content: |
-      ---
-      {{ module_conf_item | to_nice_yaml(indent=2) }}
-  vars:
-    module_name: "{{ module_conf.module }}"
-    module_conf_item:
-      - "{{ module_conf }}"
-  loop_control:
-    loop_var: module_conf
-    label: "{{ module_name }}"
-  notify: restart filebeat
-  loop: "{{ filebeat_conf_modules }}"
 
 - name: manage filebeat services
   service:
     name: "{{ filebeat_service_name }}"
     state: "{{ filebeat_service_status }}"
     enabled: "{{ filebeat_service_enabled }}"
+  when: filebeat_service_manage | bool
