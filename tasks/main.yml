@@ -97,4 +97,4 @@
     name: "{{ filebeat_service_name }}"
     state: "{{ filebeat_service_status }}"
     enabled: "{{ filebeat_service_enabled }}"
-  when: filebeat_package_state in ['present', 'absent']
+  when: filebeat_package_state in ['present', 'latest']
