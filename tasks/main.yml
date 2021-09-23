@@ -90,7 +90,7 @@
 
   when:
     - filebeat_conf_manage | bool
-    - filebeat_package_state in ['present', 'absent']
+    - filebeat_package_state in ['present', 'latest']
 
 - name: manage filebeat services
   service:
