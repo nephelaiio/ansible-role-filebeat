@@ -4,28 +4,39 @@
     name: nephelaiio.elastic_repo
   when: filebeat_repo_manage | bool
 
+- name: inspect packages
+  package_facts:
+    manager: auto
+
 - block:
 
-    - name: install yum version lock support
-      package:
-        name: yum-plugin-versionlock
-      when: ansible_os_family == 'RedHat'
+    - block:
 
-    - name: disable yum package lock
-      command: "yum versionlock delete {{ item }}"
-      ignore_errors: yes
-      loop: "{{ [filebeat_package_names] | flatten }}"
-      when: ansible_os_family == 'RedHat'
-      tags:
-        - skip_ansible_lint
+        - name: install yum version lock support
+          package:
+            name: yum-plugin-versionlock
+
+        - name: disable yum package lock
+          community.general.yum_versionlock:
+            name: "{{ item }}"
+            state: absent
+          loop: "{{ [filebeat_package_names] | flatten }}"
+          when: item in packages
+          tags:
+            - skip_ansible_lint
+
+      when: (ansible_os_family | lower) == 'redhat'
 
     - name: disable apt package lock
-      command: "apt-mark unhold {{ item }}"
+      dpkg_selections:
+        name: "{{ item }}"
+        selection: install
       loop: "{{ [filebeat_package_names] | flatten }}"
-      when: ansible_os_family == 'Debian'
+      when:
+        - (ansible_os_family | lower) == 'debian'
+        - item in packages
 
   when: filebeat_package_hold | bool
-  ignore_errors: yes
 
 - name: install filebeat elastic packages
   package:
@@ -34,23 +45,25 @@
 
 - block:
 
-    - name: enable apt package hold
-      command: "apt-mark hold {{ item }}"
-      loop: "{{ [filebeat_package_names] | flatten }}"
-      when:
-        - ansible_os_family == 'Debian'
+    - block:
 
-    - name: enable yum package lock
-      command: "yum versionlock add {{ item }}"
-      loop: "{{ [filebeat_package_names] | flatten }}"
-      when:
-        - ansible_os_family == 'RedHat'
-      tags:
-        - skip_ansible_lint
+        - name: enable apt package hold
+          dpkg_selections:
+            name: "{{ item }}"
+            selection: hold
+          loop: "{{ [filebeat_package_names] | flatten }}"
+          when: (ansible_os_family | lower) == 'debian'
 
-  when: filebeat_package_hold | bool
+        - name: enable yum package lock
+          community.general.yum_versionlock:
+            name: "{{ item }}"
+            state: present
+          loop: "{{ [filebeat_package_names] | flatten }}"
+          when: (ansible_os_family | lower) == 'redhat'
+          tags:
+            - skip_ansible_lint
 
-- block:
+      when: filebeat_package_hold | bool
 
     - name: configure filebeat
       copy:
@@ -87,14 +100,12 @@
         label: "{{ module_name }}"
       notify: restart filebeat
       loop: "{{ filebeat_conf_modules }}"
+      when: filebeat_conf_manage | bool
 
-  when:
-    - filebeat_conf_manage | bool
-    - filebeat_package_state in ['present', 'latest']
+    - name: manage filebeat services
+      service:
+        name: "{{ filebeat_service_name }}"
+        state: "{{ filebeat_service_status }}"
+        enabled: "{{ filebeat_service_enabled }}"
 
-- name: manage filebeat services
-  service:
-    name: "{{ filebeat_service_name }}"
-    state: "{{ filebeat_service_status }}"
-    enabled: "{{ filebeat_service_enabled }}"
   when: filebeat_package_state in ['present', 'latest']
