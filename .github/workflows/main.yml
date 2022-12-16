@@ -29,13 +29,17 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install test dependencies.
-        run: pip3 install yamllint ansible-lint ansible
+      - name: install poetry
+        run: pip3 install poetry
+
+      - name: install pips
+        run: poetry install
 
       - name: Lint code.
         run: |
-          yamllint .
-          ansible-lint .
+          set -e
+          poetry run yamllint .
+          poetry run ansible-lint .
 
   molecule:
     name: Molecule
