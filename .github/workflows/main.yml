@@ -29,10 +29,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: install poetry
+      - name: Install poetry
         run: pip3 install poetry
 
-      - name: install pips
+      - name: Install pips
         run: poetry install
 
       - name: Lint code.
@@ -70,10 +70,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: install poetry
+      - name: Install poetry
         run: pip3 install poetry
 
-      - name: install pips
+      - name: Install pips
         run: poetry install
 
       - name: Run Molecule tests.
