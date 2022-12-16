@@ -72,6 +72,7 @@
 
           {{ filebeat_conf | to_nice_yaml(indent=2) }}
         dest: "{{ filebeat_conf_path }}"
+        mode: 0644
       notify: restart filebeat
 
     - name: prune stale filebeat module configuration files
@@ -91,6 +92,7 @@
         content: |
           ---
           {{ module_conf_item | to_nice_yaml(indent=2) }}
+        mode: 0644
       vars:
         module_name: "{{ module_conf.module }}"
         module_conf_item:
