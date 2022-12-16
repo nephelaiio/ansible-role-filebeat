@@ -70,11 +70,14 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker pytest pytest-testinfra
+      - name: install poetry
+        run: pip3 install poetry
+
+      - name: install pips
+        run: poetry install
 
       - name: Run Molecule tests.
-        run: molecule test
+        run: poetry run molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
