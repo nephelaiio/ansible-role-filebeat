@@ -9,7 +9,7 @@ platforms:
     pre_build_image: true
     command: ${MOLECULE_COMMAND:-"/lib/systemd/systemd"}
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rs
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
     privileged: true
     tmpfs:
       - /tmp
