@@ -1,6 +1,6 @@
 ---
 - name: restart filebeat
-  service:
+  ansible.builtin.service:
     name: "{{ filebeat_service_name }}"
     state: restarted
   when: filebeat_service_status == 'started'
