@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "nephelaiio.filebeat"
+version = "0.1.0"
+description = ""
+authors = ["Ted Cook <teodoro.cook@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+molecule = {extras = ["docker"], version = "^4.0.4"}
+yamllint = "^1.28.0"
+ansible-lint = "~5"
+ansible = "^7.1.0"
+markupsafe = "2.0.1"
+netaddr = "^0.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
