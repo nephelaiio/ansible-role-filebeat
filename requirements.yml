@@ -1,0 +1,4 @@
+---
+roles:
+  - name: nephelaiio.plugins
+  - name: nephelaiio.elastic_repo
