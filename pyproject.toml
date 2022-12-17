@@ -12,6 +12,7 @@ yamllint = "^1.28.0"
 ansible-lint = "~5"
 ansible = "^7.1.0"
 markupsafe = "2.0.1"
+netaddr = "^0.8.0"
 
 
 [build-system]
