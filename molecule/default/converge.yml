@@ -13,5 +13,4 @@
 
   roles:
 
-    - role: nephelaiio.plugins
     - role: nephelaiio.filebeat

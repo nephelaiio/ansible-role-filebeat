@@ -11,6 +11,7 @@ molecule = {extras = ["docker"], version = "^4.0.4"}
 yamllint = "^1.28.0"
 ansible-lint = "~5"
 ansible = "^7.1.0"
+markupsafe = "2.0.1"
 
 
 [build-system]

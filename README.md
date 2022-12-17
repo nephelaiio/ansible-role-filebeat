@@ -56,7 +56,6 @@ Please review the [dependency configuration](/meta/main.yml) for more details
 
   roles:
 
-     - role: nephelaiio.plugins
      - role: nephelaiio.filebeat
 ```
 
