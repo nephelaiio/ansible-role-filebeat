@@ -12,8 +12,3 @@
       ansible.builtin.fail:
         msg: "filebeat service is not running"
       when: ansible_facts.services['filebeat'].state != 'running'
-
-    - name: ensure filebeat service is enabled
-      ansible.builtin.fail:
-        msg: "filebeat service is not enabled"
-      when: ansible_facts.services['filebeat'].status != 'enabled'
