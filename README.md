@@ -18,8 +18,12 @@ Please review the [dependency configuration](/meta/main.yml) for more details
 ## Example Playbook
 
 ```
-- hosts: servers
+- name: Deploy filebeat
+
+  hosts: servers
+
   vars:
+
     filebeat_package_state: latest
     filebeat_conf_manage: yes
     filebeat_conf:
@@ -49,7 +53,10 @@ Please review the [dependency configuration](/meta/main.yml) for more details
           enabled: true
         kibana:
           host: http://localhost:80
+
   roles:
+
+     - role: nephelaiio.plugins
      - role: nephelaiio.filebeat
 ```
 
