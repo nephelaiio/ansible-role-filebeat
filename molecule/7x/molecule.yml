@@ -35,12 +35,12 @@ provisioner:
             level: info
             to_files: true
             files:
-              path: /var/log/filebeat
+              path: /var/log
               name: filebeat
               keepfiles: 7
               permissions: 0640
         filebeat_conf_inputs:
-          - type: filesystem
+          - type: filestream
             id: syslog
             paths:
               - /var/log/syslog
