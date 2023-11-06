@@ -44,6 +44,10 @@ provisioner:
             id: syslog
             paths:
               - /var/log/syslog
+              - /var/log/messages
+          - type: journald
+            id: journald
+         filebeat_conf_output:
         filebeat_conf_output:
           file:
             path: /tmp

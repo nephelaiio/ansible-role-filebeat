@@ -33,7 +33,7 @@
         msg: "Service {{ _service }} is not enabled"
       when: services[_service].status != "enabled"
 
-    - name: Verify output file
+    - name: Verify Ubuntu output file
       ansible.builtin.stat:
         path: "{{ filebeat_conf_output.file.path }}/{{ filebeat_conf_output.file.filename }}{{ _suffix }}"
       vars:
@@ -46,3 +46,4 @@
       retries: 2
       delay: 60
       until: _output_file.stat.exists
+      when: ansible_distribution == 'Ubuntu'
