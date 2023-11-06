@@ -30,6 +30,20 @@ provisioner:
       all:
         elasticsearch_repo_major_version: 7
         filebeat_package_hold: true
+        filebeat_conf_extra:
+          logging:
+            level: info
+            to_files: true
+            files:
+              path: /var/log/filebeat
+              name: filebeat
+              keepfiles: 7
+              permissions: 0640
+        filebeat_conf_inputs:
+          - type: filesystem
+            id: syslog
+            paths:
+              - /var/log/syslog
         filebeat_conf_output:
           file:
             path: /tmp
