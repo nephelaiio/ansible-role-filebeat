@@ -1,6 +1,6 @@
 # nephelaiio.filebeat
 
-[![Build Status](https://github.com/nephelaiio/ansible-role-filebeat/workflows/CI/badge.svg)](https://github.com/nephelaiio/ansible-role-filebeat/actions)
+[![Build Status](https://github.com/nephelaiio/ansible-role-filebeat/workflows/molecule.yml/badge.svg)](https://github.com/nephelaiio/ansible-role-filebeat/actions/workflows/molecule.yml)
 [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-nephelaiio.filebeat-blue.svg)](https://galaxy.ansible.com/nephelaiio/filebeat/)
 
 An [ansible role](https://galaxy.ansible.com/nephelaiio/filebeat) to install and configure filebeat
@@ -19,13 +19,10 @@ Please review the [dependency configuration](/meta/main.yml) for more details
 
 ```
 - name: Deploy filebeat
-
   hosts: servers
-
   vars:
-
     filebeat_package_state: latest
-    filebeat_conf_manage: yes
+    filebeat_conf_manage: true
     filebeat_conf:
       fields:
         environment: development
@@ -53,9 +50,7 @@ Please review the [dependency configuration](/meta/main.yml) for more details
           enabled: true
         kibana:
           host: http://localhost:80
-
   roles:
-
      - role: nephelaiio.filebeat
 ```
 
@@ -64,11 +59,11 @@ Please review the [dependency configuration](/meta/main.yml) for more details
 Please make sure your environment has [docker](https://www.docker.com) installed in order to run role validation tests. Additional python dependencies are listed in the [requirements file](https://github.com/nephelaiio/ansible-role-requirements/blob/master/requirements.txt)
 
 Role is tested against the following distributions (docker images):
+  * Ubuntu Jammy
   * Ubuntu Focal
-  * Ubuntu Bionic
-  * Ubuntu Xenial
-  * Debian Stretch
-  * CentOS 7
+  * Debian Bookworm
+  * Debian Bullseye
+  * Rocky Linux 9
 
 You can test the role directly from sources using command ` molecule test `
 

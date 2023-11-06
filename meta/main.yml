@@ -1,27 +1,23 @@
 ---
 galaxy_info:
   role_name: filebeat
-  namespace: nephelaiio
   author: nephelaiio
-  description: An Ansible role to install and configure metricbeat
+  description: An Ansible role to install and configure filebeat
   license: MIT
   min_ansible_version: '2.7'
   platforms:
     - name: EL
       versions:
-        - '7'
+        - all
     - name: Ubuntu
       versions:
-        - 'focal'
-        - 'bionic'
-        - 'xenial'
+        - all
     - name: Debian
       versions:
-        - 'buster'
-  galaxy_tags:
-    - filebeat
+        - all
+  galaxy_tags: ['filebeat']
 
 dependencies:
   - name: nephelaiio.plugins
   - name: nephelaiio.elastic_repo
-    when: false
+    when: filebeat_repo_manage
