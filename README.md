@@ -25,7 +25,7 @@ Please review the [dependency configuration](/meta/main.yml) for more details
   vars:
 
     filebeat_package_state: latest
-    filebeat_conf_manage: yes
+    filebeat_conf_manage: true
     filebeat_conf:
       fields:
         environment: development
