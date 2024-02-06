@@ -17,5 +17,4 @@ galaxy_info:
         - all
   galaxy_tags: ['filebeat']
 
-dependencies:
-  - name: nephelaiio.plugins
+dependencies: []
