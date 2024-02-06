@@ -30,14 +30,17 @@ filebeat_conf_inputs: []
 
 filebeat_conf_extra: {}
 
+_filebeat_conf_port_elasticsearch: "{{ filebeat_conf_elasticsearch_port }}:"
+_filebeat_conf_port_logstash: "{{ filebeat_conf_logstash_port }}:"
+
 filebeat_conf_output_elasticsearch:
   enabled: "{{ filebeat_conf_elasticsearch_enabled }}"
-  hosts: "{{ filebeat_conf_elasticsearch_hosts | map('map_format', '%s:' + (filebeat_conf_elasticsearch_port | string)) | list }}"
+  hosts: "{{ filebeat_conf_elasticsearch_hosts | product([_filebeat_conf_port_elasticsearch]) | map('join') | list }}"
   loadbalance: "{{ filebeat_conf_elasticsearch_loadbalance }}"
 
 filebeat_conf_output_logstash:
   enabled: "{{ filebeat_conf_logstash_enabled }}"
-  hosts: "{{ filebeat_conf_logstash_hosts | map('map_format', '%s:' + (filebeat_conf_logstash_port | string)) | list }}"
+  hosts: "{{ filebeat_conf_elasticsearch_hosts | product([_filebeat_conf_port_logstash]) | map('join') | list }}"
   loadbalance: "{{ filebeat_conf_logstash_loadbalance }}"
 
 filebeat_conf_output:
