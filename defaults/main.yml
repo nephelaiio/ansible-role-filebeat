@@ -57,6 +57,16 @@ filebeat_conf_setup:
   kibana:
     host: "{{ filebeat_conf_kibana_host }}"
 
+filebeat_conf_logging:
+  level: warning
+  to_syslog: false
+  to_files: true
+  files:
+    path: /var/log/filebeat
+    name: filebeat
+    keepfiles: 7
+    permissions: 0644
+
 filebeat_conf_base:
   filebeat:
     config:
@@ -65,5 +75,6 @@ filebeat_conf_base:
     inputs: "{{ filebeat_conf_inputs }}"
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
+  logging: "{{ filebeat_conf_logging }}"
 
 filebeat_conf: "{{ filebeat_conf_base | combine(filebeat_conf_extra) }}"
