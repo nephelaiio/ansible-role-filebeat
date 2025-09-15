@@ -1,11 +1,9 @@
 ---
-# This workflow requires a GALAXY_API_KEY secret present in the GitHub
-# repository or organization.
-#
-# See: https://github.com/marketplace/actions/publish-ansible-role-to-galaxy
-# See: https://github.com/ansible/galaxy/issues/46
-
 name: release
+
+env:
+  DEVBOX_VERSION: ${{ vars.DEVBOX_VERSION }}
+
 on:
   push:
     tags:
@@ -13,7 +11,7 @@ on:
 
 defaults:
   run:
-    working-directory: 'nephelaiio.filebeat'
+    working-directory: "nephelaiio.filebeat"
 
 jobs:
   release:
@@ -23,24 +21,21 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v4
         with:
-          path: 'nephelaiio.filebeat'
+          path: "nephelaiio.filebeat"
 
-      - name: Set up Python 3
-        uses: actions/setup-python@v4
+      - name: Generate devbox locale
+        run: sudo locale-gen C.UTF-8
+
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.13.0
         with:
-          python-version: '3.x'
-
-      - name: Update ubuntu repositories
-        run: sudo apt-get update
-
-      - name: Install make
-        run: sudo apt-get install -y make
+          enable-cache: true
 
       - name: Install dependencies
         run: make install
 
-      - name: Trigger a new import on galaxy
-        run: make publish
+      - name: Release collection
+        run: devbox run -- make publish
         env:
           GALAXY_API_KEY: "${{ secrets.GALAXY_API_KEY }}"
           GITHUB_REPOSITORY: "${{ github.repository }}"
