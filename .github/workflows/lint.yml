@@ -24,6 +24,7 @@ jobs:
         uses: jetify-com/devbox-install-action@v0.13.0
         with:
           enable-cache: true
+          project_path: "nephelaiio.filebeat"
 
       - name: Install test requirements
         run: devbox run -- make requirements
