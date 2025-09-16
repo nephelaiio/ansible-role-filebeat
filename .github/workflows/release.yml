@@ -1,9 +1,6 @@
 ---
 name: release
 
-env:
-  DEVBOX_VERSION: ${{ vars.DEVBOX_VERSION }}
-
 on:
   push:
     tags:
@@ -23,13 +20,11 @@ jobs:
         with:
           path: "nephelaiio.filebeat"
 
-      - name: Generate devbox locale
-        run: sudo locale-gen C.UTF-8
-
       - name: Install devbox
         uses: jetify-com/devbox-install-action@v0.13.0
         with:
           enable-cache: true
+          project-path: "nephelaiio.filebeat"
 
       - name: Install dependencies
         run: make install
