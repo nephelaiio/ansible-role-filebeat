@@ -76,5 +76,7 @@ filebeat_conf_base:
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
   logging: "{{ filebeat_conf_logging }}"
+  seccomp:
+    enabled: false
 
 filebeat_conf: "{{ filebeat_conf_base | combine(filebeat_conf_extra) }}"
