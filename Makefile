@@ -41,4 +41,4 @@ publish:
 		--api-key ${GALAXY_API_KEY} ${GITHUB_ORG} ${GITHUB_REPO}
 
 debug:
-	@uv export --dev --without-hashes || exit 0
+	@uv export --dev
