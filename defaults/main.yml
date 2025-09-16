@@ -30,8 +30,8 @@ filebeat_conf_inputs: []
 
 filebeat_conf_extra: {}
 
-_filebeat_conf_port_elasticsearch: "{{ filebeat_conf_elasticsearch_port }}:"
-_filebeat_conf_port_logstash: "{{ filebeat_conf_logstash_port }}:"
+_filebeat_conf_port_elasticsearch: "{{ filebeat_conf_elasticsearch_port }}"
+_filebeat_conf_port_logstash: "{{ filebeat_conf_logstash_port }}"
 
 filebeat_conf_output_elasticsearch:
   enabled: "{{ filebeat_conf_elasticsearch_enabled }}"
@@ -67,6 +67,9 @@ filebeat_conf_logging:
     keepfiles: 7
     permissions: "0644"
 
+filebeat_conf_seccomp:
+  enabled: false
+
 filebeat_conf_base:
   filebeat:
     config:
@@ -76,5 +79,6 @@ filebeat_conf_base:
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
   logging: "{{ filebeat_conf_logging }}"
+  seccomp: "{{ filebeat_conf_seccomp }}"
 
 filebeat_conf: "{{ filebeat_conf_base | combine(filebeat_conf_extra) }}"
