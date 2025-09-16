@@ -38,7 +38,7 @@ provisioner:
               path: /var/log
               name: filebeat
               keepfiles: 7
-              permissions: 0640
+              permissions: "0640"
         filebeat_conf_inputs:
           - type: filestream
             id: syslog

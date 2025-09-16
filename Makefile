@@ -22,6 +22,7 @@ install:
 
 lint: install
 	uv run yamllint .
+	ANSIBLE_COLLECTIONS_PATH=$(MAKEFILE_DIR) \
 	uv run ansible-lint .
 
 dependency create prepare converge idempotence side-effect verify destroy login reset:
