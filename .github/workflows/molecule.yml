@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        scenario:
+          - install
         release:
           - 7
           - 8
@@ -60,5 +62,5 @@ jobs:
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DOCKER_IMAGE: ${{ matrix.image.name }}
           MOLECULE_DOCKER_COMMAND: ${{ matrix.image.command }}
-          MOLECULE_SCENARIO: ${{ matrix.scenario.name }}
+          MOLECULE_SCENARIO: ${{ matrix.scenario }}
           MOLECULE_ELASTICSEARCH_MAJOR_VERSION: ${{ matrix.release }}
