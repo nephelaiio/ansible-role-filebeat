@@ -26,11 +26,8 @@ jobs:
           enable-cache: true
           project-path: "nephelaiio.filebeat"
 
-      - name: Install test requirements
-        run: devbox run -- make requirements
-
       - name: Debug test environment
         run: devbox run -- make debug
 
       - name: Run molecule tests
-        run: devbox run -- make test
+        run: devbox run -- make lint
