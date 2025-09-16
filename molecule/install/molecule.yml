@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: filebeat-7x
+  - name: filebeat
     image: "geerlingguy/docker-${MOLECULE_DOCKER_IMAGE:-ubuntu2004}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     cgroupns_mode: host
@@ -28,7 +28,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        elasticsearch_repo_major_version: 7
+        elasticsearch_repo_major_version: "{{ lookup('env','MOLECULE_ELASTICSEARCH_MAJOR_VERSION') }}"
         filebeat_package_hold: true
         filebeat_conf_extra:
           logging:
@@ -38,7 +38,7 @@ provisioner:
               path: /var/log
               name: filebeat
               keepfiles: 7
-              permissions: 0640
+              permissions: "0640"
         filebeat_conf_inputs:
           - type: filestream
             id: syslog

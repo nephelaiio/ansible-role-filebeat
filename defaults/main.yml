@@ -13,17 +13,17 @@ filebeat_package_hold: false
 filebeat_conf_elasticsearch_enabled: true
 filebeat_conf_elasticsearch_loadbalance: true
 filebeat_conf_elasticsearch_port: 9200
-filebeat_conf_elasticsearch_hosts: ['localhost']
+filebeat_conf_elasticsearch_hosts: ["localhost"]
 
 filebeat_conf_logstash_enabled: false
 filebeat_conf_logstash_loadbalance: true
 filebeat_conf_logstash_port: 5044
-filebeat_conf_logstash_hosts: ['localhost']
+filebeat_conf_logstash_hosts: ["localhost"]
 
 filebeat_conf_dashboards_enabled: false
 filebeat_conf_dashboards_kibana: true
 filebeat_conf_template_enabled: true
-filebeat_conf_kibana_host: 'localhost:80'
+filebeat_conf_kibana_host: "localhost:80"
 
 filebeat_conf_modules: []
 filebeat_conf_inputs: []
@@ -65,7 +65,7 @@ filebeat_conf_logging:
     path: /var/log/filebeat
     name: filebeat
     keepfiles: 7
-    permissions: 0644
+    permissions: "0644"
 
 filebeat_conf_base:
   filebeat:

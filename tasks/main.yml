@@ -11,11 +11,9 @@
 - name: Release filebeat package pin
   when: filebeat_package_hold | bool
   block:
-
     - name: Disable yum package lock
       when: ansible_os_family == 'RedHat'
       block:
-
         - name: Install yum version lock support
           ansible.builtin.package:
             name: yum-plugin-versionlock
@@ -46,11 +44,9 @@
 - name: Configure filebeat service
   when: filebeat_package_state in ['present', 'latest']
   block:
-
     - name: Pin filebeat package release
       when: filebeat_package_hold | bool
       block:
-
         - name: Enable apt package hold
           ansible.builtin.dpkg_selections:
             name: "{{ item }}"
@@ -74,7 +70,7 @@
 
           {{ filebeat_conf | to_nice_yaml(indent=2) }}
         dest: "{{ filebeat_conf_path }}"
-        mode: 0644
+        mode: "0644"
       notify: filebeat_restart
 
     - name: Prune stale filebeat module configuration files
@@ -94,7 +90,7 @@
         content: |
           ---
           {{ module_conf_item | to_nice_yaml(indent=2) }}
-        mode: 0644
+        mode: "0644"
       vars:
         module_name: "{{ module_conf.module }}"
         module_conf_item:
