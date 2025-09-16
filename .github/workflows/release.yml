@@ -27,7 +27,7 @@ jobs:
           project-path: "nephelaiio.filebeat"
 
       - name: Install dependencies
-        run: make install
+        run: devbox run make install
 
       - name: Release collection
         run: devbox run -- make publish
