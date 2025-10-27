@@ -102,5 +102,8 @@
       loop: "{{ filebeat_conf_modules }}"
       when: filebeat_conf_manage | bool
 
-    - name: Include service tasks
-      ansible.builtin.include_tasks: service.yml
+    - name: Manage filebeat services
+      ansible.builtin.service:
+        name: "{{ filebeat_service_name }}"
+        state: "{{ filebeat_service_status }}"
+        enabled: "{{ filebeat_service_enabled }}"
