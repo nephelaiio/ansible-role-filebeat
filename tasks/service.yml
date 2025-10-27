@@ -1,6 +1,0 @@
----
-- name: Manage filebeat services
-  ansible.builtin.service:
-    name: "{{ filebeat_service_name }}"
-    state: "{{ filebeat_service_status }}"
-    enabled: "{{ filebeat_service_enabled }}"
