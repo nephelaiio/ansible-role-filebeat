@@ -1,3 +1,4 @@
 ---
 roles:
   - name: nephelaiio.elastic_repo
+  - name: community.general
