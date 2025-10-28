@@ -28,7 +28,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        elastic_repo_major_version: "{{ lookup('env','MOLECULE_ELASTIC_MAJOR_VERSION') }}"
+        elastic_repo_major_version: "{{ lookup('env','MOLECULE_BEATS_MAJOR_VERSION', default=9) }}"
         filebeat_package_hold: true
         filebeat_conf_extra:
           logging:
