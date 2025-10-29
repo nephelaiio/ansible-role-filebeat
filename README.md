@@ -11,7 +11,7 @@ Please refer to the [defaults file](/defaults/main.yml) for an up to date list o
 
 ## Dependencies
 
-* [nephelaiio.elastic_repo](https://galaxy.ansible.com/nephelaiio/elastic_repo/)
+- [nephelaiio.elastic_repo](https://galaxy.ansible.com/nephelaiio/elastic_repo/)
 
 Please review the [dependency configuration](/meta/main.yml) for more details
 
@@ -59,13 +59,15 @@ Please review the [dependency configuration](/meta/main.yml) for more details
 Please make sure your environment has [docker](https://www.docker.com) installed in order to run role validation tests. Additional python dependencies are listed in the [requirements file](https://github.com/nephelaiio/ansible-role-requirements/blob/master/requirements.txt)
 
 Role is tested against the following distributions (docker images):
-  * Ubuntu Jammy
-  * Ubuntu Focal
-  * Debian Bookworm
-  * Debian Bullseye
-  * Rocky Linux 9
 
-You can test the role directly from sources using command ` molecule test `
+- Ubuntu Nobl3
+- Ubuntu Jammy
+- Ubuntu Focal
+- Debian Trixie
+- Debian Bookworm
+- Rocky Linux 9
+
+You can test the role directly from sources using command `molecule test`
 
 ## License
 

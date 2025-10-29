@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: filebeat
-    image: "geerlingguy/docker-${MOLECULE_DOCKER_IMAGE:-ubuntu2004}-ansible:latest"
+    image: "geerlingguy/docker-${MOLECULE_DOCKER_IMAGE:-ubuntu2404}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     cgroupns_mode: host
     privileged: true
@@ -28,25 +28,27 @@ provisioner:
   inventory:
     group_vars:
       all:
-        elasticsearch_repo_major_version: "{{ lookup('env','MOLECULE_ELASTICSEARCH_MAJOR_VERSION') }}"
+        elastic_repo_major_version: "{{ lookup('env','MOLECULE_BEATS_MAJOR_VERSION', default=9) }}"
         filebeat_package_hold: true
-        filebeat_conf_extra:
-          logging:
-            level: info
-            to_files: true
-            files:
-              path: /var/log
-              name: filebeat
-              keepfiles: 7
-              permissions: "0640"
+        filebeat_conf_logging:
+          files:
+            keepfiles: 7
+            name: filebeat
+            path: /var/log/filebeat
+            permissions: "0644"
+          level: info
+          to_files: true
+          to_syslog: false
         filebeat_conf_inputs:
           - type: filestream
-            id: syslog
+            id: molecule
+            enabled: true
             paths:
-              - /var/log/syslog
-              - /var/log/messages
-          - type: journald
-            id: journald
+              - /tmp/test.log
+            prospector:
+              scanner:
+                fingerprint:
+                  enabled: false
         filebeat_conf_output:
           file:
             path: /tmp

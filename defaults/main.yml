@@ -10,52 +10,21 @@ filebeat_service_status: started
 filebeat_service_enabled: true
 filebeat_package_hold: false
 
-filebeat_conf_elasticsearch_enabled: true
-filebeat_conf_elasticsearch_loadbalance: true
-filebeat_conf_elasticsearch_port: 9200
-filebeat_conf_elasticsearch_hosts: ["localhost"]
-
-filebeat_conf_logstash_enabled: false
-filebeat_conf_logstash_loadbalance: true
-filebeat_conf_logstash_port: 5044
-filebeat_conf_logstash_hosts: ["localhost"]
-
-filebeat_conf_dashboards_enabled: false
-filebeat_conf_dashboards_kibana: true
-filebeat_conf_template_enabled: true
-filebeat_conf_kibana_host: "localhost:80"
-
 filebeat_conf_modules: []
 filebeat_conf_inputs: []
 
-filebeat_conf_extra: {}
-
-_filebeat_conf_port_elasticsearch: "{{ filebeat_conf_elasticsearch_port }}"
-_filebeat_conf_port_logstash: "{{ filebeat_conf_logstash_port }}"
-
-filebeat_conf_output_elasticsearch:
-  enabled: "{{ filebeat_conf_elasticsearch_enabled }}"
-  hosts: "{{ filebeat_conf_elasticsearch_hosts | product([_filebeat_conf_port_elasticsearch]) | map('join') | list }}"
-  loadbalance: "{{ filebeat_conf_elasticsearch_loadbalance }}"
-
-filebeat_conf_output_logstash:
-  enabled: "{{ filebeat_conf_logstash_enabled }}"
-  hosts: "{{ filebeat_conf_elasticsearch_hosts | product([_filebeat_conf_port_logstash]) | map('join') | list }}"
-  loadbalance: "{{ filebeat_conf_logstash_loadbalance }}"
-
 filebeat_conf_output:
-  elasticsearch: "{{ filebeat_conf_output_elasticsearch }}"
-  logstash: "{{ filebeat_conf_output_logstash }}"
+  enabled: true
+  hosts: "localhost:9201"
+  loadbalance: false
 
 filebeat_conf_setup:
   dashboards:
-    enabled: "{{ filebeat_conf_dashboards_enabled }}"
-    beat: filebeat
-    always_kibana: "{{ filebeat_conf_dashboards_kibana }}"
+    enabled: false
   template:
-    enabled: "{{ filebeat_conf_template_enabled }}"
-  kibana:
-    host: "{{ filebeat_conf_kibana_host }}"
+    enabled: false
+  ilm:
+    enabled: false
 
 filebeat_conf_logging:
   level: warning
@@ -70,15 +39,16 @@ filebeat_conf_logging:
 filebeat_conf_seccomp:
   enabled: false
 
-filebeat_conf_base:
+filebeat_conf_fields: {}
+
+filebeat_conf:
   filebeat:
+    inputs: "{{ filebeat_conf_inputs }}"
     config:
       modules:
         path: "{{ filebeat_conf_modules_path }}/*.yml"
-    inputs: "{{ filebeat_conf_inputs }}"
   output: "{{ filebeat_conf_output }}"
   setup: "{{ filebeat_conf_setup }}"
   logging: "{{ filebeat_conf_logging }}"
   seccomp: "{{ filebeat_conf_seccomp }}"
-
-filebeat_conf: "{{ filebeat_conf_base | combine(filebeat_conf_extra) }}"
+  fields: "{{ filebeat_conf_fields }}"

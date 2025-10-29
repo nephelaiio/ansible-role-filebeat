@@ -102,5 +102,28 @@
       loop: "{{ filebeat_conf_modules }}"
       when: filebeat_conf_manage | bool
 
-    - name: Include service tasks
-      ansible.builtin.include_tasks: service.yml
+    - name: Manage filebeat services
+      ansible.builtin.service:
+        name: "{{ filebeat_service_name }}"
+        state: "{{ filebeat_service_status }}"
+        enabled: "{{ filebeat_service_enabled }}"
+
+    - name: List disabled modules
+      ansible.builtin.find:
+        paths: "{{ filebeat_conf_modules_path }}"
+        patterns: "*.disabled"
+      register: filebeat_disabled_modules
+
+    - name: Remove disabled modules
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ filebeat_disabled_modules.files | map(attribute='path') }}"
+
+    - name: Remove installation artifacts
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ filebeat_conf_path | dirname }}/filebeat.reference.yml"
+        - "{{ filebeat_conf_path }}.dpkg-dist"
