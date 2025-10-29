@@ -8,11 +8,10 @@
 .devbox/
 .molecule/
 .venv/
-ansible_collections/
 libvirt/
+molecule/default/roles/
 
 # globs
 **/__pycache__/**
-pokerops-rke2-*.tar.gz
 *.ymle
 

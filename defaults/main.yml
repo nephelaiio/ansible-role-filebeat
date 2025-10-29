@@ -43,6 +43,7 @@ filebeat_conf_fields: {}
 
 filebeat_conf:
   filebeat:
+    inputs: "{{ filebeat_conf_inputs }}"
     config:
       modules:
         path: "{{ filebeat_conf_modules_path }}/*.yml"
