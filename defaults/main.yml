@@ -11,7 +11,8 @@ filebeat_service_status: started
 filebeat_service_enabled: true
 filebeat_package_hold: false
 
-filebeat_conf_modules: []
+filebeat_conf_modules:
+  module_name: []
 filebeat_conf_inputs: []
 
 filebeat_conf_output:
