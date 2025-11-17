@@ -44,7 +44,7 @@
 - name: Configure filebeat service
   when: filebeat_package_state in ['present', 'latest']
   block:
-    - name: Pin filebeat package release
+    - name: Enable package locks
       when: filebeat_package_hold | bool
       block:
         - name: Enable apt package hold
@@ -63,7 +63,7 @@
           changed_when: false
           when: ansible_os_family == 'RedHat'
 
-    - name: Configure filebeat
+    - name: Manage filebeat main configuration file
       ansible.builtin.copy:
         content: |
           # Ansible managed
@@ -72,17 +72,6 @@
         dest: "{{ filebeat_conf_path }}"
         mode: "0644"
       notify: filebeat_restart
-
-    - name: Prune stale filebeat module configuration files
-      ansible.builtin.file:
-        path: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml.disabled"
-        state: absent
-      vars:
-        module_name: "{{ module_conf.module }}"
-      loop_control:
-        loop_var: module_conf
-        label: "{{ module_name }}"
-      loop: "{{ filebeat_conf_modules }}"
 
     - name: Manage filebeat module configuration list
       ansible.builtin.copy:
