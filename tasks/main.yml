@@ -44,7 +44,7 @@
 - name: Configure filebeat service
   when: filebeat_package_state in ['present', 'latest']
   block:
-    - name: Pin filebeat package release
+    - name: Enable package locks
       when: filebeat_package_hold | bool
       block:
         - name: Enable apt package hold
@@ -63,7 +63,7 @@
           changed_when: false
           when: ansible_os_family == 'RedHat'
 
-    - name: Configure filebeat
+    - name: Manage filebeat main configuration file
       ansible.builtin.copy:
         content: |
           # Ansible managed
@@ -73,34 +73,18 @@
         mode: "0644"
       notify: filebeat_restart
 
-    - name: Prune stale filebeat module configuration files
-      ansible.builtin.file:
-        path: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml.disabled"
-        state: absent
-      vars:
-        module_name: "{{ module_conf.module }}"
-      loop_control:
-        loop_var: module_conf
-        label: "{{ module_name }}"
-      loop: "{{ filebeat_conf_modules }}"
-
-    - name: Manage filebeat module configuration files
+    - name: Manage filebeat module configuration list
       ansible.builtin.copy:
-        dest: "{{ filebeat_conf_modules_path }}/{{ module_name }}.yml"
+        dest: "{{ filebeat_conf_modules_path }}/{{ item.key }}{{ filebeat_conf_modules_ext}}"
         content: |
           ---
-          {{ module_conf_item | to_nice_yaml(indent=2) }}
+          {{ item.value | to_nice_yaml(indent=2) }}
         mode: "0644"
-      vars:
-        module_name: "{{ module_conf.module }}"
-        module_conf_item:
-          - "{{ module_conf }}"
       loop_control:
-        loop_var: module_conf
-        label: "{{ module_name }}"
-      notify: filebeat_restart
-      loop: "{{ filebeat_conf_modules }}"
+        label: "{{ item.key }}"
+      loop: "{{ filebeat_conf_modules | dict2items }}"
       when: filebeat_conf_manage | bool
+      notify: filebeat_restart
 
     - name: Manage filebeat services
       ansible.builtin.service:
@@ -112,18 +96,52 @@
       ansible.builtin.find:
         paths: "{{ filebeat_conf_modules_path }}"
         patterns: "*.disabled"
-      register: filebeat_disabled_modules
+      register: filebeat_modules_disabled
 
     - name: Remove disabled modules
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
-      loop: "{{ filebeat_disabled_modules.files | map(attribute='path') }}"
+      loop: "{{ filebeat_modules_disabled.files | map(attribute='path') }}"
 
-    - name: Remove installation artifacts
+    - name: Remove reference configuration
+      ansible.builtin.file:
+        path: "{{ filebeat_conf_path | dirname }}/filebeat.reference.yml"
+        state: absent
+
+    - name: List active modules
+      ansible.builtin.find:
+        paths: "{{ filebeat_conf_modules_path }}"
+        patterns: "*"
+      register: filebeat_modules_active
+
+    - name: List installation artifacts
+      ansible.builtin.find:
+        paths: "{{ filebeat_conf_modules_path }}"
+        patterns: "*.dpkg-dist"
+        recurse: true
+      register: filebeat_conf_artifacts
+
+    - name: Drop installation artifacts
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
-      loop:
-        - "{{ filebeat_conf_path | dirname }}/filebeat.reference.yml"
-        - "{{ filebeat_conf_path }}.dpkg-dist"
+      loop: "{{ filebeat_conf_artifacts.files | map(attribute='path') }}"
+
+    - name: List present modules
+      ansible.builtin.find:
+        paths: "{{ filebeat_conf_modules_path }}"
+        patterns: "*"
+      register: filebeat_modules_present
+
+    - name: Drop inactive modules
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      vars:
+        _filebeat_conf_files: "{{ filebeat_modules_present.files | map(attribute='path') }}"
+        _filebeat_modules_path: "{{ filebeat_conf_modules_path }}/"
+        _filebeat_modules_names: "{{ filebeat_conf_modules | dict2items | map(attribute='key') }}"
+        _filebeat_modules_basenames: "{{ _filebeat_modules_names | map('regex_replace', '$', filebeat_conf_modules_ext) }}"
+        _filebeat_modules_files: "{{ [_filebeat_modules_path] | product(_filebeat_modules_basenames) | map('join') }}"
+      loop: "{{ _filebeat_modules_files | difference(_filebeat_conf_files) | list }}"
